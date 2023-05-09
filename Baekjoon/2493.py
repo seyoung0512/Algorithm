@@ -2,24 +2,17 @@
 
 n = int(input())
 st = []
-flag = 1
-answer = [0]
+answer = []
 
 a = list(map(int, input().split(' ')))
-st.append(a[0])
-print(a)
-print(st)
-for i in range(1, n):
-    print(i)
+for i in range(n):
     while st:
-        if flag:
-            k = st.pop()
-            print("k", k)
-            if a[i] < k:
-                answer.append(a.index(a[i]))
-                st.append(a[i])
-
-            else:
-                answer.append(0)
-                st.append(a[i])
-    print(flag, a[i], st)
+        if st[-1][1] > a[i]:
+            answer.append(st[-1][0] + 1)
+            break
+        else:
+            st.pop()
+    if not st:
+        answer.append(0)
+    st.append([i, a[i]])
+print(' '.join(str(i) for i in answer))
