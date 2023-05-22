@@ -1,17 +1,19 @@
 # https://www.acmicpc.net/problem/11003
 
 import sys
+from collections import deque
 
-n, m = map(int, input().split(' '))
-a = map(int, sys.stdin.readline().rstrip().split(' '))
-print(a)
-answer = ''
+n, k = map(int, input().split(' '))
+a = list(map(int, sys.stdin.readline().rstrip().split(' ')))
+q = deque()
+answer = []
+
 for i in range(n):
-    print(a[i])
-    if i < m:
-        answer += str(min(a[:i+1])) + ' '
-    else:
-        answer += str(min(a[i-m+1:i+1])) + ' '
-
-print(answer)
+    while q and q[-1][0] > a[i]:
+        q.pop()
+    while q and q[0][1] < i-k+1:
+        q.popleft()
+    q.append((a[i], i))
+    answer.append(q[0][0])
+print(*answer)
 
