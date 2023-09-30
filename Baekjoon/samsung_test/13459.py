@@ -33,7 +33,7 @@ def bfs():
             if board[nbx][nby] == 'O':
                 continue
             if board[nrx][nry] == 'O':
-                print(depth)
+                print(1)
                 return
             if nrx == nbx and nry == nby:
                 if r_count > b_count:
@@ -45,7 +45,7 @@ def bfs():
             if not visited[nrx][nry][nbx][nby]:
                 queue.append((nrx,nry,nbx,nby,depth+1))
                 visited[nrx][nry][nbx][nby] = True
-    print(-1)
+    print(0)
 
 
 ri, rj, bi, bj = 0, 0, 0, 0

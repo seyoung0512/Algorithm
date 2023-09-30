@@ -1,71 +1,64 @@
 n, m, k = map(int, input().split())
-
-stickers = []
 board = [[0] * m for _ in range(n)]
-
-for _ in range(k):
-    y, x = map(int, input().split())
-    sticker = [list(map(int, input().split())) for _ in range(y)]
-    stickers.append(sticker)
+stickers = []
 
 
-def canCoordinate(sticker):
+def canCoordinate(sticker, board):
     coordinate = []
-    xOffset = len(sticker[0])
-    yOffset = len(sticker)
-    for y in range(n):
-        for x in range(m):
-            if board[y][x] == 0 or (board[y][x] and sticker[0][0] == 0):
-                if y + yOffset <= n:
-                    if x + xOffset <= m:
-                        coordinate.append((y,x))
+    xOffset = len(sticker)
+    yOffset = len(sticker[0])
+    for x in range(n):
+        for y in range(m):
+            if not board[x][y] or (board[x][y] and not sticker[0][0]):
+                if x + xOffset <= n:
+                    if y + yOffset <= m:
+                        coordinate.append((x, y))
     return coordinate
 
-def put(sticker, y, x):
+
+def put(x, y, sticker):
     for i in range(len(sticker)):
         for j in range(len(sticker[0])):
             if sticker[i][j]:
-                board[i+y][j+x] = 1
+                board[i+x][j+y] = 1
 
 
-def canPut(sticker, y, x):
+def canPut(x, y, sticker):
     for i in range(len(sticker)):
         for j in range(len(sticker[0])):
-            if board[y+i][j+x] and sticker[i][j]:
+            if board[i+x][j+y] and sticker[i][j]:
                 return False
     return True
+
 
 def rotation(sticker):
     sticker = zip(*sticker[::-1])
     return [list(e) for e in sticker]
 
+
 def logic(sticker):
-    for _ in range(4):
-        coordinate = canCoordinate(sticker)
-        # print('가능한 좌표들', coordinate)
+    for i in range(4):
+        coordinate = canCoordinate(sticker, board)
         if coordinate:
-            for y, x in coordinate:
-                if canPut(sticker, y, x):
-                    # print('(', y, x, ') 에다가 넣음')
-                    put(sticker, y, x)
-                    # print('----------현재 보드 상황------------')
-                    # for i in range(n):
-                    #     print(board[i])
-                    # print('--------------------------------')
+            for x, y in coordinate:
+                if canPut(x, y, sticker):
+                    put(x, y, sticker)
                     return
         sticker = rotation(sticker)
-        # print('-----------회전시킨거-----------')
-        # for xx in range(len(sticker)):
-        #     print(sticker[xx])
+
+
+for _ in range(k):
+    r, c = map(int, input().split())
+    sticker = [list(map(int, input().split())) for _ in range(r)]
+    stickers.append(sticker)
 
 for sticker in stickers:
     logic(sticker)
 
-
 cnt = 0
 for i in range(n):
     for j in range(m):
-        if board[i][j] == 1:
+        if board[i][j]:
             cnt += 1
 
 print(cnt)
